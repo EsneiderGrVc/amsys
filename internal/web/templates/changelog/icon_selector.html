@@ -1,0 +1,35 @@
+{{ define "icon_selector" }} {{ if eq . "ERROR" }}
+<i class="bi bi-bug-fill" title="Error" style="color: rgb(201, 82, 82)"></i>
+{{ else if eq . "FUNCIONALIDAD" }}
+<i class="bi bi-box-fill" title="Funcionalidad" style="color: green"></i>
+{{ else if eq . "MEJORA" }}
+<i
+  class="bi bi-wrench-adjustable"
+  title="Mejora"
+  style="color: rgb(33, 103, 178)"
+></i>
+{{ else if eq . "REFACTORIZACIÓN" }}
+<i
+  class="bi bi-file-diff-fill"
+  title="Refactorización"
+  style="color: orange"
+></i>
+{{ else if eq . "PRUEBA AUTOMATIZADA" }}
+<i
+  class="bi bi-file-check"
+  title="Prueba automatizada"
+  style="color: purple"
+></i>
+{{ else if eq . "PROTOTIPO" }}
+<i class="bi bi-file-earmark-play" title="Prototipo" style="color: teal"></i>
+{{ else if eq . "DOCUMENTACIÓN" }}
+<i class="bi bi-bookmarks-fill" title="Documentación" style="color: brown"></i>
+{{ else if eq . "INFRAESTRUCTURA" }}
+<i class="bi bi-server" title="Infraestructura" style="color: gray"></i>
+{{ else }}
+<i
+  class="bi bi-question-circle"
+  title="Tipo desconocido"
+  style="color: black"
+></i>
+{{ end }} {{ end }}

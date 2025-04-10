@@ -1,0 +1,13 @@
+{{ define "content" }}
+<h2>Welcome to the Go + HTMX App!</h2>
+<p>Click below to load users dynamically:</p>
+
+<button hx-get="/api/users"
+        hx-trigger="click"
+        hx-target="#users"
+        hx-swap="innerHTML">
+    Load Users
+</button>
+
+<ul id="users"></ul>
+{{ end }}

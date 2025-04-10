@@ -1,0 +1,50 @@
+<div class="p-4">
+  <!-- <table class="border-2 rounded-lg border-collapse"> -->
+  <table>
+    <thead>
+      <tr class="border-b-2 border-gray-300">
+        <th class="text-left pt-2 pr-5 pb-2">Nombre</th>
+        <th class="text-left pt-2 pr-5 pb-2">Repositorio</th>
+        <th class="text-left pt-2 pr-5 pb-2">PR ID</th>
+        <th class="text-left pt-2 pr-5 pb-2">Descripción</th>
+        <th class="text-left pt-2 pr-5 pb-2">Tags</th>
+        <th class="text-left pt-2 pr-5 pb-2">Version</th>
+        <th class="text-left pt-2 pr-5 pb-2">Implementado en</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .Versions }}
+      <tr>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .Name }}</td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .Repo }}</td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .PrID }}</td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">
+          {{ .Description }}
+        </td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .Tags }}</td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .Version }}</td>
+        <td class="pt-1 pr-5 pb-1 border border-gray-300">{{ .MergedAt }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>
+
+<div>
+  {{ if gt .PrevPage 0 }}
+  <button
+    hx-get="/paginate?page={{ .PrevPage }}&projectId=sinhantb"
+    hx-target="#table-container"
+  >
+    Previous
+  </button>
+  {{ end }} {{ if lt .NextPage 4 }}
+  <!-- Assuming 4 pages max -->
+  <button
+    hx-get="/paginate?page={{ .NextPage }}&projectId=sinhantb"
+    hx-target="#table-container"
+  >
+    Next
+  </button>
+  {{ end }}
+</div>

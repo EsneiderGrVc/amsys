@@ -1,0 +1,21 @@
+services:
+  app:
+    container_name: "amsys-api-prod"
+    profiles: [ "prod" ]
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - '.env'
+    ports:
+      - "3001:3001"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - amsys_network
+
+
+networks:
+  amsys_network:
+    driver: bridge
