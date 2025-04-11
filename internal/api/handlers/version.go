@@ -1,8 +1,10 @@
 package api_handlers
 
 import (
+	"amsys/internal/api/handlers/pr_parser"
 	orm_models "amsys/internal/api/models"
 	api_services "amsys/internal/api/services"
+	"log"
 
 	"encoding/json"
 	"net/http"
@@ -67,4 +69,65 @@ func CreateVersionHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "version created successfully"})
+}
+
+func CreateVersionFromGithubHandler(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body
+	body := make(map[string]any)
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid request body"})
+		return
+	}
+
+	var prTitleData map[string]interface{}
+	if prTitleInterface, ok := body["pr_title"]; ok {
+		prTitleData = prTitleInterface.(map[string]interface{})
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "pr_title is missing"})
+		return
+	}
+
+	log.Printf("PR Fields: %+v", prTitleData)
+	prTitle, err := pr_parser.ParsePRTitle(prTitleData["title"].(string))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid pr_title format"})
+		return
+	}
+	log.Printf("PR Title Fields: %+v", prTitle)
+
+	var prData map[string]interface{}
+	if prInterface, ok := body["pr_title"]; ok {
+		prData = prInterface.(map[string]interface{})
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "pr is missing"})
+		return
+	}
+
+	version := orm_models.ControlVersion{
+		IssueId:      prTitle.IssueId,
+		IssueType:    prTitle.IssueType,
+		Title:        prTitle.Title,
+		Version:      prTitle.Version,
+		AppLayer:     prTitle.AppLayer,
+		RepoOwner:    body["repo_owner"].(string),
+		RepoName:     body["repo_name"].(string),
+		TargetBranch: body["target_branch"].(string),
+		PrID:         prData["id"].(string),
+		Description:  prData["body"].(string),
+		MergedAt:     body["timestamp"].(string),
+		RawMessage:   prData["body"].(string),
+	}
+
+	if err := api_services.CreateVersion(version); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "failed to create version"})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
 }

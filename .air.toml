@@ -5,7 +5,7 @@ exclude_dir = ["tmp", "vendor", "node_modules"]
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "go build -o tmp/main ./cmd/main.go && codesign --force --deep --sign - tmp/main"
+  cmd = "go build -o tmp/main ./main.go && codesign --force --deep --sign - tmp/main"
   delay = 100
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules"]
   exclude_file = []
