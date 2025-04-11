@@ -80,6 +80,7 @@ func CreateVersionFromGithubHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("Request Body: %+v", body)
 	var prTitleData map[string]interface{}
 	if prTitleInterface, ok := body["pr_title"]; ok {
 		prTitleData = prTitleInterface.(map[string]interface{})
