@@ -2,6 +2,7 @@ package pr_parser
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 )
 
@@ -16,6 +17,7 @@ type PrTitle struct {
 }
 
 func ParsePRTitle(prTitle string) (*PrTitle, error) {
+	fmt.Println("Parsing PR Title:", prTitle)
 	pattern := `^\(([^)]+)\) \| ([A-Z]+)\[([A-Za-z]+)\]: (.+) \| ([\d.]+)$`
 	re := regexp.MustCompile(pattern)
 
