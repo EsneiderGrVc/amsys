@@ -22,6 +22,7 @@ func ParsePRTitle(prTitle string) (*PrTitle, error) {
 	re := regexp.MustCompile(pattern)
 
 	matches := re.FindStringSubmatch(prTitle)
+	fmt.Println("Matches found:", matches)
 	if len(matches) != 6 {
 		return nil, ErrInvalidFormat
 	}
